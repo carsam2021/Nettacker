@@ -27,10 +27,10 @@ def db_inputs(connection_type):
     """
     context = Config.db.as_dict()
     return {
-        "postgres": "postgres+psycopg2://{username}:{password}@{host}:{port}/{name}".format(
+        "postgres": "postgresql+psycopg2://{username}:{password}@{host}:{port}/{name}?sslmode={ssl_mode}".format(
             **context
         ),
-        "mysql": "mysql://{username}:{password}@{host}:{port}/{name}".format(**context),
+        "mysql": "mysql+pymysql://{username}:{password}@{host}:{port}/{name}".format(**context),
         "sqlite": "sqlite:///{name}".format(**context),
     }[connection_type]
 
@@ -42,9 +42,15 @@ def create_connection():
     Returns:
         connection if success otherwise False
     """
+    connection_args = {}
+
+    if Config.db.engine.startswith("sqlite"):
+        connection_args["check_same_thread"] = False
+
     db_engine = create_engine(
         db_inputs(Config.db.engine),
-        connect_args={"check_same_thread": False},
+        connect_args=connection_args,
+        pool_size=50,
         pool_pre_ping=True,
     )
     Session = sessionmaker(bind=db_engine)
@@ -117,6 +123,8 @@ def remove_old_logs(options):
         HostsLog.target == options["target"],
         HostsLog.module_name == options["module_name"],
         HostsLog.scan_unique_id != options["scan_id"],
+        HostsLog.scan_unique_id != options["scan_compare_id"],
+        # Don't remove old logs if they are to be used for the scan reports
     ).delete(synchronize_session=False)
     return send_submit_query(session)
 
@@ -359,6 +367,21 @@ def get_logs_by_scan_id(scan_id):
             "json_event": log.json_event,
         }
         for log in session.query(HostsLog).filter(HostsLog.scan_unique_id == scan_id).all()
+    ]
+
+
+def get_options_by_scan_id(scan_id):
+    """
+    select all stored options of the scan by scan id hash
+    Args:
+        scan_id: scan id hash
+    Returns:
+        an array with a dict with stored options or an empty array
+    """
+    session = create_connection()
+    return [
+        {"options": log.options}
+        for log in session.query(Report).filter(Report.scan_unique_id == scan_id).all()
     ]
 
 

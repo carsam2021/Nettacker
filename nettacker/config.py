@@ -65,11 +65,17 @@ class DbConfig(ConfigBase):
         DATABASE as the name of the db user wants
         other details can be left empty
     For mysql users:
-        fill the name of the DB as mysql
-        DATABASE as the name of the database you want to create
+        fill the ENGINE name of the DB as mysql
+        NAME as the name of the database you want to create
         USERNAME, PASSWORD, HOST and the PORT of the MySQL server
-        need to be filled respectively
-
+        need to be filled respectively (default port is 3306)
+    For postgres users:
+        fill the Engine name of the DB as postgres
+        NAME as the name of the database user wants
+        USERNAME, PASSWORD, HOST and the PORT of the Postgres server
+        need to be filled respectively (default port is 5432)
+        Set ssl_mode to "require" if you need to use encrypted
+        databases.
     """
 
     engine = "sqlite"
@@ -78,6 +84,7 @@ class DbConfig(ConfigBase):
     port = ""
     username = ""
     password = ""
+    ssl_mode = "disable"
 
 
 class PathConfig:
@@ -126,6 +133,8 @@ class DefaultSettings(ConfigBase):
     scan_ip_range = False
     scan_subdomains = False
     selected_modules = None
+    url_base_path = None
+    read_from_file = ""
     set_hardware_usage = "maximum"  # low, normal, high, maximum
     show_all_modules = False
     show_all_profiles = False
@@ -145,6 +154,8 @@ class DefaultSettings(ConfigBase):
     usernames_list = None
     verbose_event = False
     verbose_mode = False
+    scan_compare_id = None
+    compare_report_path_filename = ""
 
 
 class Config:

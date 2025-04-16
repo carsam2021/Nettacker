@@ -1028,7 +1028,7 @@ payloads:
           condition_type: or
           conditions:
             open_port:
-              regex: ""
+              regex: \d{{1,5}}
               reverse: false
 
             ftp: &ftp
@@ -1083,9 +1083,13 @@ payloads:
               reverse: false
 
             ssh:
-              regex: "openssh|\\-OpenSSH\\_|\\r\\nProtocol mism|\\_sshlib|\\x00\\x1aversion info line too long|SSH Windows NT Server|WinNT sshd|sshd| SSH Secure Shell|WinSSHD"
+              regex: "openssh|\\-OpenSSH\\_|\\r?\\n?Protocol mism|\\_sshlib|\\x00\\x1aversion info line too long|SSH Windows NT Server|WinNT sshd|sshd| SSH Secure Shell|WinSSHD|SSH-[\\d.]+-[A-Za-z0-9_\\-]+|SSH-[\\d.]+\\r?\\n?"
               reverse: false
 
             telnet:
               regex: "Check Point FireWall-1 authenticated Telnet server running on|Raptor Firewall Secure Gateway|No more connections are allowed to telnet server|Closing Telnet connection due to host problems|NetportExpress|WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING|Login authentication|recommended to use Stelnet|is not a secure protocol|Welcome to Microsoft Telnet Servic|no decompiling or reverse-engineering shall be allowed"
+              reverse: false
+
+            amqp:
+              regex: "AMQP"
               reverse: false

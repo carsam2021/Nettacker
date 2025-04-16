@@ -17,7 +17,7 @@ from nettacker.core.ip import (
 )
 from nettacker.core.messages import messages as _
 from nettacker.core.template import TemplateLoader
-from nettacker.core.utils import common as utils
+from nettacker.core.utils import common as common_utils
 from nettacker.logger import TerminalCodes, get_logger
 
 log = get_logger()
@@ -92,7 +92,7 @@ class ArgParser(ArgumentParser):
             if len(module_names) == limit:
                 module_names["..."] = {}
                 break
-        module_names = utils.sort_dictionary(module_names)
+        module_names = common_utils.sort_dictionary(module_names)
         module_names["all"] = {}
 
         return module_names
@@ -118,11 +118,11 @@ class ArgParser(ArgumentParser):
                 else:
                     profiles[tag].append(key)
                 if len(profiles) == limit:
-                    profiles = utils.sort_dictionary(profiles)
+                    profiles = common_utils.sort_dictionary(profiles)
                     profiles["..."] = []
                     profiles["all"] = []
                     return profiles
-        profiles = utils.sort_dictionary(profiles)
+        profiles = common_utils.sort_dictionary(profiles)
         profiles["all"] = []
 
         return profiles
@@ -336,6 +336,7 @@ class ArgParser(ArgumentParser):
             help=_("subdomains"),
         )
         method_options.add_argument(
+            "-d",
             "--skip-service-discovery",
             action="store_true",
             default=Config.settings.skip_service_discovery,
@@ -389,6 +390,30 @@ class ArgParser(ArgumentParser):
             dest="ping_before_scan",
             default=Config.settings.ping_before_scan,
             help=_("ping_before_scan"),
+        )
+        method_options.add_argument(
+            "-K",
+            "--scan-compare",
+            action="store",
+            dest="scan_compare_id",
+            default=Config.settings.scan_compare_id,
+            help=_("compare_scans"),
+        )
+        method_options.add_argument(
+            "-J",
+            "--compare-report-path",
+            action="store",
+            dest="compare_report_path_filename",
+            default=Config.settings.compare_report_path_filename,
+            help=_("compare_report_path_filename"),
+        )
+        method_options.add_argument(
+            "-W",
+            "--wordlist",
+            action="store",
+            default=Config.settings.read_from_file,
+            dest="read_from_file",
+            help=_("user_wordlist"),
         )
 
         # API Options
@@ -595,7 +620,9 @@ class ArgParser(ArgumentParser):
         # threading & processing
         if options.set_hardware_usage not in {"low", "normal", "high", "maximum"}:
             die_failure(_("wrong_hardware_usage"))
-        options.set_hardware_usage = utils.select_maximum_cpu_core(options.set_hardware_usage)
+        options.set_hardware_usage = common_utils.select_maximum_cpu_core(
+            options.set_hardware_usage
+        )
 
         options.thread_per_host = int(options.thread_per_host)
         if options.thread_per_host < 1:
@@ -649,6 +676,12 @@ class ArgParser(ArgumentParser):
                 options.passwords = list(set(open(options.passwords_list).read().split("\n")))
             except Exception:
                 die_failure(_("error_passwords").format(options.passwords_list))
+        # Check custom wordlist
+        if options.read_from_file:
+            try:
+                open(options.read_from_file).read().split("\n")
+            except Exception:
+                die_failure(_("error_wordlist").format(options.read_from_file))
         # Check output file
         try:
             temp_file = open(options.report_path_filename, "w")

@@ -7,9 +7,12 @@ import re
 import time
 
 import aiohttp
+import uvloop
 
 from nettacker.core.lib.base import BaseEngine
 from nettacker.core.utils.common import replace_dependent_response, reverse_and_regex_condition
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
 async def perform_request_action(action, request_options):
@@ -17,6 +20,7 @@ async def perform_request_action(action, request_options):
     async with action(**request_options) as response:
         return {
             "reason": response.reason,
+            "url": str(response.url),
             "status_code": str(response.status),
             "content": await response.content.read(),
             "headers": dict(response.headers),
@@ -40,7 +44,7 @@ def response_conditions_matched(sub_step, response):
     conditions = sub_step["response"]["conditions"]
     condition_results = {}
     for condition in conditions:
-        if condition in ["reason", "status_code", "content"]:
+        if condition in ["reason", "status_code", "content", "url"]:
             regex = re.findall(re.compile(conditions[condition]["regex"]), response[condition])
             reverse = conditions[condition]["reverse"]
             condition_results[condition] = reverse_and_regex_condition(regex, reverse)

@@ -1,9 +1,16 @@
 name: CI/CD
 
 on:
-  - pull_request
-  - push
-  - workflow_dispatch
+  merge_group:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+  workflow_dispatch:
 
 concurrency:
   cancel-in-progress: true
@@ -13,7 +20,7 @@ jobs:
   # Code quality checks.
   pre-commit:
     name: Run pre-commit
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -31,7 +38,7 @@ jobs:
       - pre-commit
     permissions:
       security-events: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
@@ -57,7 +64,7 @@ jobs:
     name: Run tests
     needs:
       - pre-commit
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -80,7 +87,7 @@ jobs:
     name: Build package
     needs:
       - run-tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -113,7 +120,7 @@ jobs:
       matrix:
         os:
           - macos-latest
-          - ubuntu-latest
+          - ubuntu-24.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -144,7 +151,7 @@ jobs:
     name: Test Docker image
     needs:
       - run-tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -200,13 +207,13 @@ jobs:
     name: Test Docker ${{ matrix.docker-version }} image build
     needs:
       - run-tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         docker-version:
-          - '24.0.6-1~ubuntu.22.04~jammy'
-          - '23.0.6-1~ubuntu.22.04~jammy'
-          - '20.10.13~3-0~ubuntu-jammy'
+          - '27.5.0-1~ubuntu.24.04~noble'
+          - '26.1.4-1~ubuntu.24.04~noble'
+          - '26.0.0-1~ubuntu.24.04~noble'
     steps:
       - name: Uninstall pre-installed Docker
         run: |
@@ -248,7 +255,7 @@ jobs:
     needs:
       - test-docker-image
       - test-docker-image-build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -279,7 +286,7 @@ jobs:
     needs:
       - test-docker-image
       - test-docker-image-build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -307,7 +314,7 @@ jobs:
   publish-to-test-pypi:
     name: Publish Test PyPI package
     if: |
-      github.repository == 'owasp/nettacker' &&
+      github.repository == 'OWASP/Nettacker' &&
       github.event_name == 'push' &&
       github.ref_name == 'master'
     environment: dev
@@ -316,7 +323,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Get package artifacts
         uses: actions/download-artifact@v4
@@ -333,16 +340,16 @@ jobs:
   publish-to-pypi:
     name: Publish PyPI package
     if: |
-      github.repository == 'owasp/nettacker' &&
+      github.repository == 'OWASP/Nettacker' &&
       github.event_name == 'push' &&
-      startsWith(github.event.ref, 'refs/tags/v')
+      startsWith(github.event.ref, 'refs/tags/')
     environment: release
     needs:
       - test-build-package
     permissions:
       contents: read
       id-token: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Get package artifacts
         uses: actions/download-artifact@v4

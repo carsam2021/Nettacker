@@ -12,6 +12,7 @@ OWASP Nettacker Modules can be of type **Scan** (scan for something), **Vuln** (
 * '**citrix_lastpatcheddate_scan**'  Scan the target and try to detect Citrix Netscaler Gateway and it's last patched date
 * '**cms_detection_scan**' - Scan the target and try to detect the CMS (Wordpress, Drupal or Joomla) using response fingerprinting
 * '**confluence_version_scan**' - Scan the target and identify the Confluence version
+* '**cups_version_scan**' - Scan the target and identify the CUPS version (on port 631)
 * '**dir_scan**' - Scan the target for well-known directories
 * '**drupal_modules_scan**' - Scan the target for popular Drupal modules
 * '**drupal_theme_scan**' - Scan the target for popular Drupal themes
@@ -19,6 +20,8 @@ OWASP Nettacker Modules can be of type **Scan** (scan for something), **Vuln** (
 * '**icmp_scan**' - Ping the target and log the response time if it responds.
 * '**http_redirect_scan**' - Scan the target and test if it returns an HTTP redirect 3xx response code and print the destination
 * '**http_status_scan**' - Scan the target and return the HTTP status code
+* '**ivanti_csa_lastpatcheddate_scan**' - Scan the target for Ivanti CSA appliance and return its last patched date
+* '**ivanti_vtm_version_scan**' - Scan the target for Ivanti vTM appliance and return its version number
 * '**joomla_template_scan**' - Scan the target for Joomla templates (identify Joomla sites)
 * '**joomla_user_enum_scan**' - Scan the target and enumerate Joomla users
 * '**joomla_version_scan**' - Scan the target and identify the Joomla version
@@ -140,6 +143,7 @@ If you want to scan all ports please define -g 1-65535 range. Otherwise Nettacke
 * '**msexchange_cve_2021_26855**' - check the target for MS Exchange SSRF CVE-2021-26855 (proxylogon/hafnium)
 * '**http_cors_vuln**' - check the web server for overly-permissive CORS (header 'Access-Control-Allow-Origin'=*)
 * '**options_method_enabled_vuln**' - check if OPTIONS method is enabled on the web server
+* '**paloalto_panos_cve_2025_0108_vuln** - check the target for PaloAlto PAN-OS CVE-2025-0108 vulnerability
 * '**ProFTPd_bypass_sqli_protection_vuln**' - check ProFTPd for CVE-2009-0543
 * '**ProFTPd_cpu_consumption_vuln**' - check ProFTPd for CVE-2008-7265
 * '**ProFTPd_directory_traversal_vuln**' - check ProFTPd for CVE-2010-3867
@@ -149,11 +153,13 @@ If you want to scan all ports please define -g 1-65535 range. Otherwise Nettacke
 * '**ProFTPd_memory_leak_vuln**' - check ProFTPd for CVE-2001-0136
 * '**ProFTPd_restriction_bypass_vuln**' - check ProFTPd for CVE-2009-3639
 * '**server_version_vuln**' - check if the web server is leaking server banner in 'Server' response header
+* '**sonicwall_sslvpn_cve_2024_53704_vuln**' - check the target for SonicWALL SSLVPN CVE-2024-53704 vulnerability
 * '**ssl_signed_certificate_vuln**' - check for self-signed & other signing issues(weak signing algorithm) in SSL certificate
 * '**ssl_expired_certificate_vuln**' - check if SSL certificate has expired or is close to expiring
 * '**ssl_version_vuln**' - check if the server's SSL configuration supports old and insecure SSL versions
 * '**ssl_weak_cipher_vuln**' - check if server's SSL configuration supports weak cipher suites
 * '**wordpress_dos_cve_2018_6389_vuln**' - check if Wordpress is vulnerable to CVE-2018-6389 Denial Of Service (DOS) 
+* '**wp_plugin_cve_2023_47668_vuln**' - check the target for CVE-2023-47668 
 * '**wp_xmlrpc_bruteforce_vuln**' - check if Wordpress is vulnerable to credential Brute Force via XMLRPC wp.getUsersBlogs
 * '**wp_xmlrpc_pingback_vuln**' - check if Wordpress is vulnerable to XMLRPC pingback 
 * '**x_powered_by_vuln**' - check if the web server is leaking server configuration in 'X-Powered-By' response header

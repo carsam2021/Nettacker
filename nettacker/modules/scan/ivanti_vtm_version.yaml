@@ -1,17 +1,14 @@
 info:
-  name: wordpress_version_scan
+  name: ivanti_vtm_version_scan
   author: OWASP Nettacker Team
   severity: 3
-  description: Directory, Backup finder
-  reference:
+  description: Ivanti vTM Version Scan
+  reference: https://www.helpnetsecurity.com/2024/09/25/cve-2024-7593-exploited/
   profiles:
     - scan
     - http
-    - backup
+    - ivanti
     - low_severity
-    - wp
-    - wordpress
-    - wp_theme
 
 payloads:
   - library: http
@@ -24,27 +21,27 @@ payloads:
         ssl: false
         url:
           nettacker_fuzzer:
-            input_format: "{{schema}}://{target}:{{ports}}/wp-content/themes/{{paths}}"
+            input_format: "{{schema}}://{target}:{{ports}}/apps/zxtm/login.cgi"
             prefix: ""
             suffix: ""
             interceptors:
             data:
               schema:
-                - "http"
                 - "https"
               ports:
-                - 80
-                - 443
-              paths:
-                read_from_file: wordlists/wp_theme_small.txt
-              
+                - 9090
         response:
           condition_type: and
-          log: "response_dependent['url']"
+          log: "response_dependent['content']"
           conditions:
             status_code:
-              regex: 200|403|401
+              regex: "200"
               reverse: false
-            url:
-              regex: .*
+            headers:
+              Pragma:
+                regex: no-cache
+                reverse: false
+            content:
+              regex: |
+                <span class="version">([0-9]+(?:\.[0-9]+)*[A-Za-z0-9]*)<\/span>
               reverse: false
