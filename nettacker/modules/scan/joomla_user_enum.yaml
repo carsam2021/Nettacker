@@ -5,37 +5,37 @@ info:
   description: fetch joomla version from target
   reference:
   profiles:
-    - scan
-    - http
-    - backup
-    - low_severity
-    - joomla
+  - scan
+  - http
+  - backup
+  - low_severity
+  - joomla
 
 payloads:
-  - library: http
-    steps:
-      - method: get
-        timeout: 3
-        headers:
-          User-Agent: "{user_agent}"
-        allow_redirects: false
-        ssl: false
-        url:
-          nettacker_fuzzer:
-            input_format: "{{schema}}://{target}:{{ports}}/?format=feed"
-            prefix: ""
-            suffix: ""
-            interceptors:
-            data:
-              schema:
-                - "http"
-                - "https"
-              ports:
-                - 80
-                - 443
-        response:
-          condition_type: or
-          conditions:
-            content:
-              regex: (?i)<author>(.+?)\((.+?)\)<\/author>
-              reverse: false
+- library: http
+  steps:
+  - method: get
+    timeout: 3
+    headers:
+      User-Agent: "{user_agent}"
+    allow_redirects: false
+    ssl: false
+    url:
+      nettacker_fuzzer:
+        input_format: "{{schema}}://{target}:{{ports}}/?format=feed"
+        prefix: ""
+        suffix: ""
+        interceptors:
+        data:
+          schema:
+          - "http"
+          - "https"
+          ports:
+          - 80
+          - 443
+    response:
+      condition_type: or
+      conditions:
+        content:
+          regex: (?i)<author>(.+?)\((.+?)\)<\/author>
+          reverse: false

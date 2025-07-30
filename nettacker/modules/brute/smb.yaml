@@ -5,37 +5,37 @@ info:
   description: SMB Bruteforcer
   reference:
   profiles:
-    - brute
-    - brute_force
-    - smb
+  - brute
+  - brute_force
+  - smb
 
 payloads:
-  - library: smb
-    steps:
-      - method: brute_force
-        timeout: 3
-        host: '{target}'
-        ports:
-          - 445
-        usernames:
-          - administrator
-          - admin
-          - root
-          - user
-          - test
-          - guest
-        passwords:
-          nettacker_fuzzer:
-            input_format: '{{passwords}}'
-            prefix:
-            suffix:
-            interceptors:
-            data:
-              passwords:
-                read_from_file: passwords/top_1000_common_passwords.txt
-        response:
-          condition_type: or
-          conditions:
-            successful_login:
-              regex: ''
-              reverse: false
+- library: smb
+  steps:
+  - method: brute_force
+    timeout: 3
+    host: '{target}'
+    ports:
+    - 445
+    usernames:
+    - administrator
+    - admin
+    - root
+    - user
+    - test
+    - guest
+    passwords:
+      nettacker_fuzzer:
+        input_format: '{{passwords}}'
+        prefix:
+        suffix:
+        interceptors:
+        data:
+          passwords:
+            read_from_file: passwords/top_1000_common_passwords.txt
+    response:
+      condition_type: or
+      conditions:
+        successful_login:
+          regex: ''
+          reverse: false

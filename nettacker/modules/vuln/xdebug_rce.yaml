@@ -5,38 +5,38 @@ info:
   description:
   reference:
   profiles:
-    - vuln
-    - vulnerability
-    - http
-    - critical_severity
-    - rce
+  - vuln
+  - vulnerability
+  - http
+  - critical_severity
+  - rce
 
 payloads:
-  - library: http
-    steps:
-      - method: get
-        timeout: 3
+- library: http
+  steps:
+  - method: get
+    timeout: 3
+    headers:
+      User-Agent: "{user_agent}"
+    allow_redirects: false
+    ssl: false
+    url:
+      nettacker_fuzzer:
+        input_format: "{{schema}}://{target}:{{ports}}/"
+        prefix: ""
+        suffix: ""
+        interceptors:
+        data:
+          schema:
+          - "http"
+          - "https"
+          ports:
+          - 80
+          - 443
+    response:
+      condition_type: or
+      conditions:
         headers:
-          User-Agent: "{user_agent}"
-        allow_redirects: false
-        ssl: false
-        url:
-          nettacker_fuzzer:
-            input_format: "{{schema}}://{target}:{{ports}}/"
-            prefix: ""
-            suffix: ""
-            interceptors:
-            data:
-              schema:
-                - "http"
-                - "https"
-              ports:
-                - 80
-                - 443
-        response:
-          condition_type: or
-          conditions:
-            headers:
-              Xdebug:
-                regex: "2.5.5"
-                reverse: false
+          Xdebug:
+            regex: "2.5.5"
+            reverse: false
