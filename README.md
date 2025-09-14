@@ -80,5 +80,10 @@ _____________
 ## Stargazers over time
 
 [![Stargazers over time](https://starchart.cc/OWASP/Nettacker.svg)](https://starchart.cc/OWASP/Nettacker)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcarsam2021%2FNettacker.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcarsam2021%2FNettacker?ref=badge_shield)
 
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcarsam2021%2FNettacker.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcarsam2021%2FNettacker?ref=badge_large)
