@@ -5,21 +5,21 @@ info:
   description: check if host is alive through ICMP
   reference:
   profiles:
-    - scan
-    - information_gathering
-    - infortmation
-    - info
-    - low_severity
+  - scan
+  - information_gathering
+  - infortmation
+  - info
+  - low_severity
 
 payloads:
-  - library: socket
-    steps:
-      - method: socket_icmp
-        timeout: 3
-        host: "{target}"
-        response:
-          condition_type: or
-          conditions:
-            time_response:
-              regex: ""
-              reverse: false
+- library: socket
+  steps:
+  - method: socket_icmp
+    timeout: 3
+    host: "{target}"
+    response:
+      condition_type: or
+      conditions:
+        time_response:
+          regex: ""
+          reverse: false

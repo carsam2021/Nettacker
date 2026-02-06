@@ -5,36 +5,36 @@ info:
   description: FTP Bruteforcer
   reference:
   profiles:
-    - brute
-    - brute_force
-    - ftp
+  - brute
+  - brute_force
+  - ftp
 
 payloads:
-  - library: ftp
-    steps:
-      - method: brute_force
-        timeout: 3
-        host: '{target}'
-        ports:
-          - 21
-        usernames:
-          - root
-          - admin
-          - user
-          - test
-          - anonymous
-        passwords:
-          nettacker_fuzzer:
-            input_format: '{{passwords}}'
-            prefix:
-            suffix:
-            interceptors:
-            data:
-              passwords:
-                read_from_file: passwords/top_1000_common_passwords.txt
-        response:
-          condition_type: or
-          conditions:
-            successful_login:
-              regex: ''
-              reverse: false
+- library: ftp
+  steps:
+  - method: brute_force
+    timeout: 3
+    host: '{target}'
+    ports:
+    - 21
+    usernames:
+    - root
+    - admin
+    - user
+    - test
+    - anonymous
+    passwords:
+      nettacker_fuzzer:
+        input_format: '{{passwords}}'
+        prefix:
+        suffix:
+        interceptors:
+        data:
+          passwords:
+            read_from_file: passwords/top_1000_common_passwords.txt
+    response:
+      condition_type: or
+      conditions:
+        successful_login:
+          regex: ''
+          reverse: false

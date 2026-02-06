@@ -5,42 +5,43 @@ info:
   description:
   reference:
   profiles:
-    - vuln
-    - vulnerability
-    - http
-    - wordpress
-    - wp
+  - vuln
+  - vulnerability
+  - http
+  - wordpress
+  - wp
 
 payloads:
-  - library: http
-    steps:
-      - method: post
-        timeout: 3
-        headers:
-          User-Agent: "{user_agent}"
-          Content-Type: "text/xml"
-        allow_redirects: false
-        ssl: false
-        url:
-          nettacker_fuzzer:
-            input_format: "{{schema}}://{target}:{{ports}}/xmlrpc.php"
-            prefix: ""
-            suffix: ""
-            interceptors:
-            data:
-              schema:
-                - "http"
-                - "https"
-              ports:
-                - 80
-                - 443
-        data: <?xml version=\"1.0\" encoding=\"utf-8\"?><methodCall><methodName>system.listMethods</methodName><params></params></methodCall>
-        response:
-          condition_type: or
-          conditions:
-            content:
-              regex: system.multicall&system.listMethods&demo.sayHello
-              reverse: false
-            status_code:
-              regex: "200"
-              reverse: false
+- library: http
+  steps:
+  - method: post
+    timeout: 3
+    headers:
+      User-Agent: "{user_agent}"
+      Content-Type: "text/xml"
+    allow_redirects: false
+    ssl: false
+    url:
+      nettacker_fuzzer:
+        input_format: "{{schema}}://{target}:{{ports}}/xmlrpc.php"
+        prefix: ""
+        suffix: ""
+        interceptors:
+        data:
+          schema:
+          - "http"
+          - "https"
+          ports:
+          - 80
+          - 443
+    data: <?xml version=\"1.0\" 
+      encoding=\"utf-8\"?><methodCall><methodName>system.listMethods</methodName><params></params></methodCall>
+    response:
+      condition_type: or
+      conditions:
+        content:
+          regex: system.multicall&system.listMethods&demo.sayHello
+          reverse: false
+        status_code:
+          regex: "200"
+          reverse: false
