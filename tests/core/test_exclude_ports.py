@@ -161,7 +161,14 @@ def template_loader_side_effect(name, inputs):
                                 }
                             }
                         ],
-                        [{"response": {"conditions": {}, "dependent_on_temp_event": True}}],
+                        [
+                            {
+                                "response": {
+                                    "conditions": {},
+                                    "dependent_on_temp_event": True,
+                                }
+                            }
+                        ],
                     ],
                 }
             ]

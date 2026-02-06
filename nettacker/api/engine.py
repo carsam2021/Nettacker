@@ -290,12 +290,15 @@ def compare_scans():
     try:
         result = create_compare_report(compare_options, scan_id_first)
         if result:
-            return jsonify(
-                structure(
-                    status="success",
-                    msg="scan_comparison_completed",
-                )
-            ), 200
+            return (
+                jsonify(
+                    structure(
+                        status="success",
+                        msg="scan_comparison_completed",
+                    )
+                ),
+                200,
+            )
         return jsonify(structure(status="error", msg="Scan ID not found")), 404
     except (FileNotFoundError, PermissionError, IOError):
         return jsonify(structure(status="error", msg="Invalid file path")), 400

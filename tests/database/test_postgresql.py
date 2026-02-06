@@ -53,7 +53,9 @@ def test_postgres_create_database_if_not_exists(mock_create_engine):
     ]
 
     with patch.object(
-        Base.metadata, "create_all", side_effect=[OperationalError("fail", None, None), None]
+        Base.metadata,
+        "create_all",
+        side_effect=[OperationalError("fail", None, None), None],
     ):
         mock_conn = MagicMock()
         mock_engine_fallback.connect.return_value = mock_conn
