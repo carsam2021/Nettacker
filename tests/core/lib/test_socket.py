@@ -163,11 +163,17 @@ class TestSocketMethod:
         self, socket_engine, substeps, responses
     ):
         result = socket_engine.response_conditions_matched(
-            substeps.tcp_connect_send_and_receive, responses.tcp_connect_send_and_receive
+            substeps.tcp_connect_send_and_receive,
+            responses.tcp_connect_send_and_receive,
         )
 
         expected = {
-            "http": ["Content-Type: ", "Content-Length: 302", "HTTP/1.1 400", "Server: "],
+            "http": [
+                "Content-Type: ",
+                "Content-Length: 302",
+                "HTTP/1.1 400",
+                "Server: ",
+            ],
             "log": [
                 "{'running_service': 'http', 'matched_regex': ['Server: ', 'HTTP/1.1 400', 'Content-Length: 302', 'Content-Type: '], 'default_service': 'http', 'ssl_flag': True}"
             ],

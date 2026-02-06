@@ -11,7 +11,10 @@ import struct
 import time
 
 from nettacker.core.lib.base import BaseEngine, BaseLibrary
-from nettacker.core.utils.common import replace_dependent_response, reverse_and_regex_condition
+from nettacker.core.utils.common import (
+    replace_dependent_response,
+    reverse_and_regex_condition,
+)
 
 log = logging.getLogger(__name__)
 
@@ -250,9 +253,11 @@ class SocketEngine(BaseEngine):
                 for condition in conditions:
                     regex = re.findall(
                         re.compile(conditions[condition]["regex"]),
-                        response["response"]
-                        if condition != "open_port"
-                        else str(response["peer_name"][1]),
+                        (
+                            response["response"]
+                            if condition != "open_port"
+                            else str(response["peer_name"][1])
+                        ),
                     )
                     reverse = conditions[condition]["reverse"]
                     condition_results[condition] = reverse_and_regex_condition(regex, reverse)

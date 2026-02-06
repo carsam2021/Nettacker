@@ -217,11 +217,13 @@ def profiles():
         label = (
             "success"
             if (profile == "scan")
-            else "warning"
-            if (profile == "brute")
-            else "danger"
-            if (profile == "vulnerability")
-            else "default"
+            else (
+                "warning"
+                if (profile == "brute")
+                else "danger"
+                if (profile == "vulnerability")
+                else "default"
+            )
         )
         res += """
             <label><input id="{0}" type="checkbox" class="checkbox checkbox-{0}">
@@ -245,20 +247,20 @@ def scan_methods():
         label = (
             "success"
             if sm.endswith("_scan")
-            else "warning"
-            if sm.endswith("_brute")
-            else "danger"
-            if sm.endswith("_vuln")
-            else "default"
+            else (
+                "warning"
+                if sm.endswith("_brute")
+                else "danger"
+                if sm.endswith("_vuln")
+                else "default"
+            )
         )
         profile = (
             "scan"
             if sm.endswith("_scan")
-            else "brute"
-            if sm.endswith("_brute")
-            else "vuln"
-            if sm.endswith("_vuln")
-            else "default"
+            else (
+                "brute" if sm.endswith("_brute") else "vuln" if sm.endswith("_vuln") else "default"
+            )
         )
         res += """<label><input id="{0}" type="checkbox" class="checkbox checkbox-{2}-module">
         <a class="label label-{1}">{0}</a></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;""".format(

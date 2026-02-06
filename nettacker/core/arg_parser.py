@@ -682,7 +682,8 @@ class ArgParser(ArgumentParser):
                 try:
                     if "-" in excluded_port:
                         for excluded_port_number in range(
-                            int(excluded_port.split("-")[0]), int(excluded_port.split("-")[1]) + 1
+                            int(excluded_port.split("-")[0]),
+                            int(excluded_port.split("-")[1]) + 1,
                         ):
                             tmp_excluded_ports.add(excluded_port_number)
                     else:

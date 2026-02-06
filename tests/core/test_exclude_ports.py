@@ -118,7 +118,12 @@ def test_start_unsupported_library(mock_loader, mock_find_events, options, modul
     mock_loader.return_value = mock_loader_inst
 
     mock_find_events.return_value = [
-        json.dumps({"port": 1234, "response": {"conditions_results": {"unsupported_lib": True}}})
+        json.dumps(
+            {
+                "port": 1234,
+                "response": {"conditions_results": {"unsupported_lib": True}},
+            }
+        )
     ]
 
     module = Module("test_module", options, **module_args)
@@ -157,7 +162,14 @@ def template_loader_side_effect(name, inputs):
                                 }
                             }
                         ],
-                        [{"response": {"conditions": {}, "dependent_on_temp_event": True}}],
+                        [
+                            {
+                                "response": {
+                                    "conditions": {},
+                                    "dependent_on_temp_event": True,
+                                }
+                            }
+                        ],
                     ],
                 }
             ]
