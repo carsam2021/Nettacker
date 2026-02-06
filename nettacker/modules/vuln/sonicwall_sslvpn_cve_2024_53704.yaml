@@ -9,7 +9,6 @@ info:
     - https://www.cisa.gov/news-events/alerts/2025/02/18/cisa-adds-two-known-exploited-vulnerabilities-catalog
   profiles:
     - vuln
-    - vulnerability
     - http
     - high_severity
     - cve
@@ -49,7 +48,7 @@ payloads:
             status_code:
               regex: "200"
               reverse: false
-            header:
+            headers:
               Server:
                 regex: 'SonicWALL SSLVPN Web Server'
                 reverse: false

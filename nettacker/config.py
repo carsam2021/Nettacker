@@ -3,7 +3,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from nettacker import version
-from nettacker.core.utils.common import now, generate_random_token
+from nettacker.core.utils.common import generate_random_token, now
 
 CWD = Path.cwd()
 PACKAGE_PATH = Path(__file__).parent
@@ -62,7 +62,7 @@ sensitive_headers = {
 class ApiConfig(ConfigBase):
     """OWASP Nettacker API Default Configuration"""
 
-    api_access_log = str(CWD / ".data/nettacker.log")
+    api_access_log = str(CWD / ".nettacker/data/nettacker.log")
     api_access_key = generate_random_token(32)
     api_client_whitelisted_ips = []  # disabled - to enable please put an array with list of ips/cidr/ranges
     # [
@@ -82,7 +82,11 @@ class DbConfig(ConfigBase):
     For sqlite database:
         fill the name of the DB as sqlite,
         DATABASE as the name of the db user wants
-        other details can be left empty
+        Set the journal_mode (default="WAL") and
+        synchronous_mode (default="NORMAL"). Rest
+        of the fields can be left empty
+        This is the default database:
+        str(CWD / ".nettacker/data/nettacker.db")
     For mysql users:
         fill the ENGINE name of the DB as mysql
         NAME as the name of the database you want to create
@@ -98,12 +102,14 @@ class DbConfig(ConfigBase):
     """
 
     engine = "sqlite"
-    name = str(CWD / ".data/nettacker.db")
+    name = str(CWD / ".nettacker/data/nettacker.db")
     host = ""
     port = ""
     username = ""
     password = ""
     ssl_mode = "disable"
+    journal_mode = "WAL"
+    synchronous_mode = "NORMAL"
 
 
 class PathConfig:
@@ -114,8 +120,9 @@ class PathConfig:
         a JSON contain the working, tmp and results path
     """
 
-    data_dir = CWD / ".data"
-    database_file = CWD / ".data/nettacker.db"
+    data_dir = CWD / ".nettacker/data"
+    new_database_file = CWD / ".nettacker/data/nettacker.db"
+    old_database_file = CWD / ".data/nettacker.db"
     graph_dir = PACKAGE_PATH / "lib/graph"
     home_dir = CWD
     locale_dir = PACKAGE_PATH / "locale"
@@ -124,8 +131,8 @@ class PathConfig:
     modules_dir = PACKAGE_PATH / "modules"
     payloads_dir = PACKAGE_PATH / "lib/payloads"
     release_name_file = PACKAGE_PATH / "release_name.txt"
-    results_dir = CWD / ".data/results"
-    tmp_dir = CWD / ".data/tmp"
+    results_dir = CWD / ".nettacker/data/results"
+    tmp_dir = CWD / ".nettacker/data/tmp"
     web_static_dir = PACKAGE_PATH / "web/static"
     user_agents_file = PACKAGE_PATH / "lib/payloads/User-Agents/web_browsers_user_agents.txt"
 
@@ -141,6 +148,9 @@ class DefaultSettings(ConfigBase):
     parallel_module_scan = 1
     passwords = None
     passwords_list = None
+    # Setting to toggle between APSW and SQLAlchemy for sqlite databases.
+    use_apsw_for_sqlite = True
+
     ping_before_scan = False
     ports = None
     profiles = None
@@ -150,6 +160,9 @@ class DefaultSettings(ConfigBase):
         random_chars=generate_random_token(10),
     )
     retries = 1
+    max_retries = 3
+    max_submit_query_retry = 100
+    retry_delay = 0.1
     scan_ip_range = False
     scan_subdomains = False
     selected_modules = None

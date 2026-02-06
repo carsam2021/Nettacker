@@ -4,16 +4,17 @@ from argparse import ArgumentParser
 
 import yaml
 
-from nettacker.config import version_info, Config
+from nettacker import all_module_severity_and_desc
+from nettacker.config import Config, version_info
 from nettacker.core.die import die_failure, die_success
 from nettacker.core.ip import (
+    generate_ip_range,
+    is_ipv4_cidr,
+    is_ipv4_range,
+    is_ipv6_cidr,
+    is_ipv6_range,
     is_single_ipv4,
     is_single_ipv6,
-    is_ipv4_cidr,
-    is_ipv6_range,
-    is_ipv6_cidr,
-    is_ipv4_range,
-    generate_ip_range,
 )
 from nettacker.core.messages import messages as _
 from nettacker.core.template import TemplateLoader
@@ -80,7 +81,6 @@ class ArgParser(ArgumentParser):
             an array of all module names
         """
         # Search for Modules
-
         module_names = {}
         for module_name in sorted(Config.path.modules_dir.glob("**/*.yaml")):
             library = str(module_name).split("/")[-1].split(".")[0]
@@ -88,7 +88,11 @@ class ArgParser(ArgumentParser):
             module = f"{library}_{category}"
             contents = yaml.safe_load(TemplateLoader(module).open().split("payload:")[0])
             module_names[module] = contents["info"] if full_details else None
-
+            info = contents.get("info", {})
+            all_module_severity_and_desc[module] = {
+                "severity": info.get("severity", 0),
+                "desc": info.get("description", ""),
+            }
             if len(module_names) == limit:
                 module_names["..."] = {}
                 break
