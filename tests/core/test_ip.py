@@ -20,7 +20,10 @@ class Responses:
                 {
                     "primary-key": {
                         "attribute": [
-                            {"name": "inetnum", "value": "223.27.114.0 - 223.27.114.127"}
+                            {
+                                "name": "inetnum",
+                                "value": "223.27.114.0 - 223.27.114.127",
+                            }
                         ]
                     }
                 }

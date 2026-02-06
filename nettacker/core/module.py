@@ -61,7 +61,10 @@ class Module:
         self.service_discovery_signatures = list(
             set(
                 contents["payloads"][0]["steps"][0]["response"]["conditions"]
-                .get("service", set(contents["payloads"][0]["steps"][0]["response"]["conditions"]))
+                .get(
+                    "service",
+                    set(contents["payloads"][0]["steps"][0]["response"]["conditions"]),
+                )
                 .keys()
             )
         )

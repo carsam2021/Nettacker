@@ -182,7 +182,9 @@ class TestSslMethod:
     @patch("ssl.wrap_socket")
     def test_create_tcp_socket(self, mock_wrap, mock_socket, connection_params):
         create_tcp_socket(
-            connection_params["HOST"], connection_params["PORT"], connection_params["TIMEOUT"]
+            connection_params["HOST"],
+            connection_params["PORT"],
+            connection_params["TIMEOUT"],
         )
 
         socket_instance = mock_socket.return_value
@@ -196,7 +198,12 @@ class TestSslMethod:
     @patch("nettacker.core.lib.ssl.is_weak_ssl_version")
     @patch("nettacker.core.lib.ssl.create_tcp_socket")
     def test_ssl_version_and_cipher_scan_secure(
-        self, mock_connection, mock_ssl_check, mock_cipher_check, ssl_library, connection_params
+        self,
+        mock_connection,
+        mock_ssl_check,
+        mock_cipher_check,
+        ssl_library,
+        connection_params,
     ):
         mock_connection.return_value = (
             MockConnectionObject(connection_params["HOST"], "TLSv1.3"),
@@ -206,7 +213,9 @@ class TestSslMethod:
         mock_cipher_check.return_value = (["HIGH"], False)
 
         result = ssl_library.ssl_version_and_cipher_scan(
-            connection_params["HOST"], connection_params["PORT"], connection_params["TIMEOUT"]
+            connection_params["HOST"],
+            connection_params["PORT"],
+            connection_params["TIMEOUT"],
         )
 
         expected = {
@@ -228,7 +237,12 @@ class TestSslMethod:
     @patch("nettacker.core.lib.ssl.is_weak_ssl_version")
     @patch("nettacker.core.lib.ssl.create_tcp_socket")
     def test_ssl_version_and_cipher_scan_weak(
-        self, mock_connection, mock_ssl_check, mock_cipher_check, ssl_library, connection_params
+        self,
+        mock_connection,
+        mock_ssl_check,
+        mock_cipher_check,
+        ssl_library,
+        connection_params,
     ):
         mock_connection.return_value = (
             MockConnectionObject(connection_params["HOST"], "TLSv1.1"),
@@ -238,7 +252,9 @@ class TestSslMethod:
         mock_cipher_check.return_value = (["LOW"], True)
 
         result = ssl_library.ssl_version_and_cipher_scan(
-            connection_params["HOST"], connection_params["PORT"], connection_params["TIMEOUT"]
+            connection_params["HOST"],
+            connection_params["PORT"],
+            connection_params["TIMEOUT"],
         )
 
         expected = {
@@ -260,12 +276,22 @@ class TestSslMethod:
     @patch("nettacker.core.lib.ssl.is_weak_ssl_version")
     @patch("nettacker.core.lib.ssl.create_tcp_socket")
     def test_ssl_version_and_cipher_scan_no_ssl(
-        self, mock_connection, mock_ssl_check, mock_cipher_check, ssl_library, connection_params
+        self,
+        mock_connection,
+        mock_ssl_check,
+        mock_cipher_check,
+        ssl_library,
+        connection_params,
     ):
-        mock_connection.return_value = (MockConnectionObject(connection_params["HOST"]), False)
+        mock_connection.return_value = (
+            MockConnectionObject(connection_params["HOST"]),
+            False,
+        )
 
         result = ssl_library.ssl_version_and_cipher_scan(
-            connection_params["HOST"], connection_params["PORT"], connection_params["TIMEOUT"]
+            connection_params["HOST"],
+            connection_params["PORT"],
+            connection_params["TIMEOUT"],
         )
 
         expected = {
@@ -304,7 +330,9 @@ class TestSslMethod:
         )
 
         result = ssl_library.ssl_certificate_scan(
-            connection_params["HOST"], connection_params["PORT"], connection_params["TIMEOUT"]
+            connection_params["HOST"],
+            connection_params["PORT"],
+            connection_params["TIMEOUT"],
         )
 
         expected = {
@@ -353,7 +381,9 @@ class TestSslMethod:
         )
 
         result = ssl_library.ssl_certificate_scan(
-            connection_params["HOST"], connection_params["PORT"], connection_params["TIMEOUT"]
+            connection_params["HOST"],
+            connection_params["PORT"],
+            connection_params["TIMEOUT"],
         )
 
         expected = {
@@ -387,10 +417,15 @@ class TestSslMethod:
         ssl_library,
         connection_params,
     ):
-        mock_connection.return_value = (MockConnectionObject(connection_params["HOST"]), False)
+        mock_connection.return_value = (
+            MockConnectionObject(connection_params["HOST"]),
+            False,
+        )
 
         result = ssl_library.ssl_certificate_scan(
-            connection_params["HOST"], connection_params["PORT"], connection_params["TIMEOUT"]
+            connection_params["HOST"],
+            connection_params["PORT"],
+            connection_params["TIMEOUT"],
         )
 
         expected = {
@@ -430,7 +465,9 @@ class TestSslMethod:
         ]
 
         result = is_weak_cipher_suite(
-            connection_params["HOST"], connection_params["PORT"], connection_params["TIMEOUT"]
+            connection_params["HOST"],
+            connection_params["PORT"],
+            connection_params["TIMEOUT"],
         )
 
         assert result == (cipher_list, True)
@@ -449,7 +486,9 @@ class TestSslMethod:
         context_instance.wrap_socket.side_effect = ssl.SSLError
 
         result = is_weak_cipher_suite(
-            connection_params["HOST"], connection_params["PORT"], connection_params["TIMEOUT"]
+            connection_params["HOST"],
+            connection_params["PORT"],
+            connection_params["TIMEOUT"],
         )
 
         assert result == ([], False)
@@ -477,7 +516,9 @@ class TestSslMethod:
         )
 
         result = is_weak_ssl_version(
-            connection_params["HOST"], connection_params["PORT"], connection_params["TIMEOUT"]
+            connection_params["HOST"],
+            connection_params["PORT"],
+            connection_params["TIMEOUT"],
         )
 
         assert result == (["TLSv1.3", "TLSv1.3", "TLSv1.3", "TLSv1.3"], False)
@@ -491,7 +532,9 @@ class TestSslMethod:
         )
 
         result = is_weak_ssl_version(
-            connection_params["HOST"], connection_params["PORT"], connection_params["TIMEOUT"]
+            connection_params["HOST"],
+            connection_params["PORT"],
+            connection_params["TIMEOUT"],
         )
 
         assert result == (["TLSv1.1", "TLSv1.1", "TLSv1.1", "TLSv1.1"], True)
@@ -507,7 +550,9 @@ class TestSslMethod:
         context_instance.wrap_socket.side_effect = exception
 
         result = is_weak_ssl_version(
-            connection_params["HOST"], connection_params["PORT"], connection_params["TIMEOUT"]
+            connection_params["HOST"],
+            connection_params["PORT"],
+            connection_params["TIMEOUT"],
         )
 
         assert result == ([], True)

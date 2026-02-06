@@ -95,7 +95,13 @@ def test_no_events(mock_log_info, mock_get_logs):
 @patch(
     "nettacker.core.graph.get_logs_by_scan_id",
     return_value=[
-        {"date": "now", "target": "x", "module_name": "mod", "port": 80, "json_event": "{}"}
+        {
+            "date": "now",
+            "target": "x",
+            "module_name": "mod",
+            "port": 80,
+            "json_event": "{}",
+        }
     ],
 )
 @patch("nettacker.core.graph.version_info", return_value=("1.0", "beta"))
@@ -127,7 +133,13 @@ def test_create_report_html(
 @patch(
     "nettacker.core.graph.get_logs_by_scan_id",
     return_value=[
-        {"date": "now", "target": "x", "module_name": "mod", "port": 80, "json_event": "{}"}
+        {
+            "date": "now",
+            "target": "x",
+            "module_name": "mod",
+            "port": 80,
+            "json_event": "{}",
+        }
     ],
 )
 @patch("builtins.open", new_callable=mock_open)
@@ -144,7 +156,13 @@ def test_json_report(mock_submit, mock_open_file, mock_get_logs):
 @patch(
     "nettacker.core.graph.get_logs_by_scan_id",
     return_value=[
-        {"date": "now", "target": "x", "module_name": "mod", "port": 80, "json_event": "{}"}
+        {
+            "date": "now",
+            "target": "x",
+            "module_name": "mod",
+            "port": 80,
+            "json_event": "{}",
+        }
     ],
 )
 @patch("csv.DictWriter")
@@ -164,7 +182,13 @@ def test_csv_report(mock_submit, mock_open_file, mock_csv_writer, mock_get_logs)
 @patch(
     "nettacker.core.graph.get_logs_by_scan_id",
     return_value=[
-        {"date": "now", "target": "x", "module_name": "mod", "port": 80, "json_event": "{}"}
+        {
+            "date": "now",
+            "target": "x",
+            "module_name": "mod",
+            "port": 80,
+            "json_event": "{}",
+        }
     ],
 )
 @patch("nettacker.core.graph.build_text_table", return_value="text table")
@@ -208,7 +232,9 @@ def test_html_json_csv_text(
         "options": json.dumps({"targets": ["1.1.1.1"]}),
     }
 
-    mock_get_logs.side_effect = lambda x: [dummy_log] if x == "scan-1" or x == "scan-comp" else []
+    mock_get_logs.side_effect = lambda x: (
+        [dummy_log] if x == "scan-1" or x == "scan-comp" else []
+    )
     mock_get_opts.side_effect = lambda x: [dummy_log]
 
     for opt in [options_html, options_json, options_csv, options_txt]:
@@ -293,7 +319,13 @@ def test_dict_options(mock_open_file, mock_text, mock_opts, mock_logs):
 @patch(
     "nettacker.core.graph.get_logs_by_scan_id",
     return_value=[
-        {"date": "now", "target": "x", "module_name": "mod", "port": 80, "json_event": "{}"}
+        {
+            "date": "now",
+            "target": "x",
+            "module_name": "mod",
+            "port": 80,
+            "json_event": "{}",
+        }
     ],
 )
 @patch("nettacker.core.graph.now", return_value="now")

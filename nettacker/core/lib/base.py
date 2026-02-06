@@ -10,7 +10,11 @@ import yaml
 from nettacker.config import Config
 from nettacker.core.messages import messages as _
 from nettacker.core.utils.common import merge_logs_to_list, remove_sensitive_header_keys
-from nettacker.database.db import find_temp_events, submit_temp_logs_to_db, submit_logs_to_db
+from nettacker.database.db import (
+    find_temp_events,
+    submit_temp_logs_to_db,
+    submit_logs_to_db,
+)
 from nettacker.logger import get_logger, TerminalCodes
 
 log = get_logger()
@@ -209,9 +213,13 @@ class BaseEngine(ABC):
                         total_number_of_requests,
                         " ".join(
                             [
-                                TerminalCodes.YELLOW.value + key + TerminalCodes.RESET.value
-                                if ":" in key
-                                else TerminalCodes.GREEN.value + key + TerminalCodes.RESET.value
+                                (
+                                    TerminalCodes.YELLOW.value + key + TerminalCodes.RESET.value
+                                    if ":" in key
+                                    else TerminalCodes.GREEN.value
+                                    + key
+                                    + TerminalCodes.RESET.value
+                                )
                                 for key in yaml.dump(event_request_keys).split()
                             ]
                         ),
@@ -219,11 +227,15 @@ class BaseEngine(ABC):
                             "conditions: "
                             + " ".join(
                                 [
-                                    TerminalCodes.PURPLE.value + key + TerminalCodes.RESET.value
-                                    if ":" in key
-                                    else TerminalCodes.GREEN.value
-                                    + key
-                                    + TerminalCodes.RESET.value
+                                    (
+                                        TerminalCodes.PURPLE.value
+                                        + key
+                                        + TerminalCodes.RESET.value
+                                        if ":" in key
+                                        else TerminalCodes.GREEN.value
+                                        + key
+                                        + TerminalCodes.RESET.value
+                                    )
                                     for key in yaml.dump(
                                         event["response"]["conditions_results"]
                                     ).split()
