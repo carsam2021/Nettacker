@@ -1,3 +1,4 @@
+import ast
 import copy
 import ctypes
 import datetime
@@ -24,7 +25,7 @@ def replace_dependent_response(log, response_dependent):
         key_name = re.findall(re.compile("response_dependent\\['\\S+\\]"), log)
         for i in key_name:
             try:
-                key_value = eval(i)
+                key_value = ast.literal_eval(i)
             except Exception:
                 key_value = "response dependent error"
             log = log.replace(i, " ".join(key_value))
