@@ -6,6 +6,7 @@ import importlib
 import json
 import math
 import multiprocessing
+import os
 import random
 import re
 import string
@@ -282,7 +283,11 @@ AVAILABLE_DATA_FUNCTIONS = {
 def fuzzer_function_read_file_as_array(filename):
     from nettacker.config import PathConfig
 
-    return open(PathConfig().payloads_dir / filename).read().split("\n")
+    base_real = os.path.realpath(PathConfig().payloads_dir)
+    target_real = os.path.realpath(PathConfig().payloads_dir / filename)
+    if os.path.commonpath([base_real, target_real]) != base_real:
+        raise ValueError("Invalid file path")
+    return open(target_real).read().split("\n")
 
 
 def apply_data_functions(data):
