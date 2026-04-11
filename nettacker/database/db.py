@@ -61,8 +61,24 @@ def create_connection():
 
             # Performance enhancing configurations. Put WAL cause that helps with concurrency.
             # Validate PRAGMA values against allowlists to prevent SQL injection
-            valid_journal_modes = {"DELETE", "TRUNCATE", "PERSIST", "MEMORY", "WAL", "OFF"}
-            valid_synchronous_modes = {"OFF", "NORMAL", "FULL", "EXTRA", "0", "1", "2", "3"}
+            valid_journal_modes = {
+                "DELETE",
+                "TRUNCATE",
+                "PERSIST",
+                "MEMORY",
+                "WAL",
+                "OFF",
+            }
+            valid_synchronous_modes = {
+                "OFF",
+                "NORMAL",
+                "FULL",
+                "EXTRA",
+                "0",
+                "1",
+                "2",
+                "3",
+            }
 
             journal_mode = Config.db.journal_mode.upper()
             if journal_mode not in valid_journal_modes:
