@@ -19,7 +19,11 @@ from nettacker.core.utils.common import (
     now,
     sanitize_path,
 )
-from nettacker.database.db import get_logs_by_scan_id, get_options_by_scan_id, submit_report_to_db
+from nettacker.database.db import (
+    get_logs_by_scan_id,
+    get_options_by_scan_id,
+    submit_report_to_db,
+)
 
 log = logger.get_logger()
 nettacker_path_config = Config.path
@@ -258,7 +262,7 @@ def create_report(options, scan_id):
                 event["target"],
                 event["module_name"],
                 event["port"],
-                "<br>".join(log_list) if log_list else "Detected",  # event["event"], #log
+                ("<br>".join(log_list) if log_list else "Detected"),  # event["event"], #log
                 index,
                 html.escape(json.dumps(event)),
             )

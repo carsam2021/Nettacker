@@ -31,7 +31,10 @@ class TestDatabase:
         self.sample_event = {
             "date": "2024-01-01 10:00:00",
             "scan_id": "test_scan_123",
-            "options": {"report_path_filename": "/tmp/test_report.json", "target": "192.168.1.1"},
+            "options": {
+                "report_path_filename": "/tmp/test_report.json",
+                "target": "192.168.1.1",
+            },
         }
 
         self.sample_log = {
@@ -770,7 +773,10 @@ class TestDatabase:
         mock_cursor = Mock()
         mock_create_conn.return_value = (mock_connection, mock_cursor)
 
-        mock_cursor.fetchall.return_value = [('{"event1": "data1"}',), ('{"event2": "data2"}',)]
+        mock_cursor.fetchall.return_value = [
+            ('{"event1": "data1"}',),
+            ('{"event2": "data2"}',),
+        ]
 
         result = find_events("192.168.1.1", "port_scan", "scan_123")
 
@@ -829,7 +835,13 @@ class TestDatabase:
         mock_create_conn.return_value = (mock_connection, mock_cursor)
 
         mock_cursor.fetchall.return_value = [
-            (1, "2024-01-01", "scan_123", "/tmp/report.json", '{"target": "192.168.1.1"}')
+            (
+                1,
+                "2024-01-01",
+                "scan_123",
+                "/tmp/report.json",
+                '{"target": "192.168.1.1"}',
+            )
         ]
 
         result = select_reports(self.page)
@@ -1208,7 +1220,10 @@ class TestDatabase:
         mock_create_conn.return_value = (mock_connection, mock_cursor)
 
         mock_cursor.fetchall.return_value = []
-        mock_structure.return_value = {"status": "finished", "msg": "No more search results"}
+        mock_structure.return_value = {
+            "status": "finished",
+            "msg": "No more search results",
+        }
 
         result = search_logs(1, "nonexistent")
 

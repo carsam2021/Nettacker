@@ -63,9 +63,11 @@ def response_conditions_matched(sub_step, response):
                 try:
                     regex = re.findall(
                         re.compile(conditions["headers"][header]["regex"]),
-                        response["headers"][header.lower()]
-                        if header.lower() in response["headers"]
-                        else False,
+                        (
+                            response["headers"][header.lower()]
+                            if header.lower() in response["headers"]
+                            else False
+                        ),
                     )
                     condition_results["headers"][header] = reverse_and_regex_condition(
                         regex, reverse
@@ -199,9 +201,9 @@ class HttpEngine(BaseEngine):
             sub_step["response"]["conditions_results"]
             or sub_step["response"]["condition_type"] == "or"
         ):
-            sub_step["response"]["conditions"][
-                "iterative_response_match"
-            ] = backup_iterative_response_match
+            sub_step["response"]["conditions"]["iterative_response_match"] = (
+                backup_iterative_response_match
+            )
             for key in sub_step["response"]["conditions"]["iterative_response_match"]:
                 result = response_conditions_matched(
                     sub_step["response"]["conditions"]["iterative_response_match"][key],
