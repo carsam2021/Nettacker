@@ -17,7 +17,7 @@ payloads:
         ports:
           - 21
         usernames:
-          - root
+        - root
           - admin
           - user
           - test
