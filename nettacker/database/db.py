@@ -60,8 +60,35 @@ def create_connection():
             cursor = connection.cursor()
 
             # Performance enhancing configurations. Put WAL cause that helps with concurrency.
-            cursor.execute(f"PRAGMA journal_mode={Config.db.journal_mode}")
-            cursor.execute(f"PRAGMA synchronous={Config.db.synchronous_mode}")
+            # Validate PRAGMA values against allowlists to prevent SQL injection
+            valid_journal_modes = {
+                "DELETE",
+                "TRUNCATE",
+                "PERSIST",
+                "MEMORY",
+                "WAL",
+                "OFF",
+            }
+            valid_synchronous_modes = {
+                "OFF",
+                "NORMAL",
+                "FULL",
+                "EXTRA",
+                "0",
+                "1",
+                "2",
+                "3",
+            }
+
+            journal_mode = Config.db.journal_mode.upper()
+            if journal_mode not in valid_journal_modes:
+                raise ValueError(f"Invalid journal_mode: {Config.db.journal_mode}")
+            cursor.execute(f"PRAGMA journal_mode={journal_mode}")
+
+            synchronous_mode = str(Config.db.synchronous_mode).upper()
+            if synchronous_mode not in valid_synchronous_modes:
+                raise ValueError(f"Invalid synchronous_mode: {Config.db.synchronous_mode}")
+            cursor.execute(f"PRAGMA synchronous={synchronous_mode}")
 
             return connection, cursor
         except Exception as e:
